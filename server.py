@@ -1,44 +1,47 @@
-import random
+import random, datetime
 from flask import Flask, render_template, request, session, redirect
 app = Flask(__name__)
 app.secret_key = 'keepitonlock'
 
 @app.route('/')
 def home():
-    if 'total' not in session:
-        session['total'] = 0
-    if 'activity' not in session:
-        session['activity'] = None
-
-
-    return render_template('index.html', total=session['total'], activities=session['activity'])
+    session.clear() # clear sessions to reset the game
+    return render_template('index.html')
 
 
 @app.route('/process_money', methods=['POST'])
 def calculate_gold():
-
-    hidden_input = request.form['hidden']
-
-    if hidden_input == 'farm':
-        farm = random.randrange(10, 21)
-        session['total'] += farm
-    elif hidden_input == 'cave':
-        cave = random.randrange(5, 11)
-        session['total'] += cave
-    elif hidden_input == 'house':
-        house = random.randrange(2, 6)
-        session['total'] += cave
-    elif hidden_input == 'cave':
-        casino = random.randrange(0, 50)
-        chance = random.randrange(1,2)
-        if chance == 1:
-            return 'earn'
-            session['total'] += casino
+    earned = 0
+    msg = ''
+    timestamp =  datetime.datetime.now().strftime("%Y/%m/%d %I:%M %p")
+    if request.form['building'] == 'farm':
+        earned = random.randint(10,21)
+        msg += 'Earned {} golds from the farm! {}'.format(earned,timestamp)
+    elif request.form['building'] == 'cave':
+        earned = random.randint(5,11)
+        msg += 'Earned {} golds from the cave! {}'.format(earned,timestamp)
+    elif request.form['building'] == 'house':
+        earned = random.randint(2,6)
+        msg += 'Earned {} golds from the house! {}'.format(earned,timestamp)
+    elif request.form['building'] == 'casino':
+        earned = random.randint(0,51)
+        if earned <= 1:
+            msg += 'Entered a casino and lost {} golds...Ouch! {}'.format(earned,timestamp)
         else:
-            return 'lose'
-            session['total'] -= casino
+            msg += 'Entered a casino and took {} golds...Feel lucky! {}'.format(earned,timestamp)
 
-    return render_template('process_money.html')
-    # return redirect('/')
+    try:
+        # update gold balance by earned amount
+        session['gold'] += earned
+    except KeyError:  # there was no gold balance found, so start it
+        session['gold'] = earned
+
+    try:
+        # update activity textarea by concatenating msg
+        session['activity'] += msg + '\n'
+    except KeyError:
+        session['activity'] = msg + '\n'
+
+    return render_template('index.html', gold=session['gold'], activities=session['activity'])
 
 app.run(debug=True)

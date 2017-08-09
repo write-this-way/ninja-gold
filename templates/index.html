@@ -6,7 +6,7 @@
 </head>
   <body>
 
-    {{ session }}
+    <!-- {{ session }} -->
 
 
     <h3>Your gold: {{session['gold']}}</h3>
@@ -17,25 +17,34 @@
         <input type="hidden" name="building" value="farm" />
         <input type="submit" value="Find Gold!"/>
       </div>
+    </form>
 
+    <form action="/process_money" method="post">
       <div class="buildings">
         <h4>Cave</h4></br>(earns 5-10 golds)</br></br>
         <input type="hidden" name="building" value="cave" />
         <input type="submit" value="Find Gold!"/>
       </div>
+    </form>
 
+    <form action="/process_money" method="post">
       <div class="buildings">
         <h4>House</h4></br>(earns 2-5 golds)</br></br>
         <input type="hidden" name="building" value="house" />
         <input type="submit" value="Find Gold!"/>
       </div>
+    </form>
 
+  <form action="/process_money" method="post">
       <div class="buildings">
-        <h4>Casino</h4></br>(earns/takes 0-50 golds)</br></br>
+        <h4>Casino</h4></br>(earns/loses 0-50 golds)</br></br>
         <input type="hidden" name="casino" value="casino" />
         <input type="submit" value="Find Gold!"/>
       </div>
     </form>
+
+    <h4>Activities:</h4>
+    <textarea name="textarea" rows="8" cols="80">{{session['activity']}}</textarea>
 
   </body>
 </html>
