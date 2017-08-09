@@ -1,0 +1,16 @@
+h1 {
+  text-decoration: underline;
+}
+
+.earn {
+  color: green;
+}
+
+.lose {
+  color: red;
+}
+
+.buildings {
+  display: inline-block;
+  margin-right: 45px;
+}
