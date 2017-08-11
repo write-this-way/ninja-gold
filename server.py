@@ -57,25 +57,25 @@ def register():
     if len(request.form['confirmpwd']) != len(request.form['password']):
         flash("Password does not match")
     else:
-        return render_template('registration.html', password=session['password'])
+        return render_template('registration.html', confirmpwd=session['confirmpwd'])
 
 
 # Email should be a valid email
 
-email = request.form['email']
-
-def isValidEmail(email):
-	if len(email) > 7:
-		if re.match(request.form['email'], email) != None:
-			return True
-        else:
-    	       return False
-               flash("Email address is not valid")
-
-if isValidEmail(email) == True :
-    print ("This is a valid email address")
-else:
-	print ("This is not a valid email address")
+# email = request.form['email']
+#
+# def isValidEmail(email):
+# 	if len(email) > 7:
+# 		if re.match(request.form['email']) != None:
+# 			return True
+#         else:
+#     	       return False
+#                flash("Email address is not valid")
+#
+# if isValidEmail(email) == True :
+#     print ("This is a valid email address")
+# else:
+# 	print ("This is not a valid email address")
 
 
 
