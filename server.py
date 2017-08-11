@@ -6,7 +6,7 @@ app.secret_key = 'keepitonlock'
 @app.route('/')
 def home():
     session.clear() # clear sessions to reset the form
-    return render_template('index.html')
+    return render_template('index.html', form_data=request.form)
 
 
 @app.route('/registration', methods=['POST'])
@@ -31,8 +31,10 @@ def register():
 
 # Password should be more than 8 characters
 
-    if len(request.form['password']) > 8:
+    if len(request.form['password']) < 1: # has no characters filled in
         flash("Password exceeds 8 characters")
+    elif len(request.form['password']) > 8:
+        flash("Please enter a password")
     else:
         return render_template('registration.html', password=session['password'])
 
